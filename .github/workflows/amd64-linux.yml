@@ -1,0 +1,23 @@
+name: release-amd64-linux
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: NAME="debian_bullseye_amd64_sysroot" LIB_ARCH="x86_64" URL="https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/f5f68713249b52b35db9e08f67184cac392369ab/debian_bullseye_amd64_sysroot.tar.xz" ./build.sh
+
+      - name: Release artifact
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            debian_bullseye_amd64_sysroot.tar.xz
+            debian_bullseye_amd64_sysroot.tar.zst
